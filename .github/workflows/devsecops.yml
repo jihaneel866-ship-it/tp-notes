@@ -7,7 +7,7 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -18,7 +18,7 @@ jobs:
   sast:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Semgrep (SAST)
         run: >
           docker run --rm -v "$PWD:/src" -w /src semgrep/semgrep
@@ -27,21 +27,21 @@ jobs:
   secrets:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Gitleaks (secrets)
         run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest dir /repo -v
 
   sca:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: npm audit (SCA)
         run: npm audit --omit=dev --audit-level=high
 
   iac:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Checkov (Dockerfile)
         run: docker run --rm -v "$PWD:/src" bridgecrew/checkov -d /src --framework dockerfile --compact
 
@@ -49,7 +49,7 @@ jobs:
     needs: [build-test, sast, secrets, sca, iac]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build
         run: docker build -t tp-notes:${{ github.sha }} .
       - name: Trivy (porte de sécurité)
